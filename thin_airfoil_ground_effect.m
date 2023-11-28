@@ -7,7 +7,7 @@ close all
 alpha_deg = linspace(-6,22,100); % angle of attack in degree
 alpha_rad = alpha_deg *pi/180 ;
 % NACA4412 profile : but you can choose any other 4-digit of your choice
-m = 0.0; % relative maximum camber
+m = 0.04; % relative maximum camber
 p = 0.4; % relative location of maximum camber
 t = 0.12; % relative thikness
 c = 1;
@@ -25,18 +25,25 @@ h = 0.5; % high with respect to ground (mesure at the trelling edge)
 Zsy = [Z(1,:) ; - Z(2,:)] ;
 
 
-%% computation of the vorteces force of the discretized point
-
-
+%% computation of the Cl without the ground but with the discretized methode
+for i =1:20 % variation of the AOA from 1 to 20°
+    alpha_t(i) = i*pi/180; % Angle of attack in rad (AOA)
+    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_t(i), h, nb, Uinf) ;
+    Cpu_inf = - abs(k_inf)/Uinf ;
+    Cpl_inf = abs(k_inf)/Uinf ;
+    Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Graphics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure;
+hold on
 plot(alpha_deg, CL);
+plot(alpha_t*180/pi,Cl_inf,"d",'Color','red'); % plot the Cl values found with the discretized methode
 title('Lift coeficient of a airfoil without ground effect');
 xlabel('alpha [°]');
 ylabel('CL [-]');
-
+hold off
 
 %% graphic of the NACA 4412 at a high of h/c
 figure;
@@ -60,8 +67,8 @@ hold off
 
 %% graphic of the vortex strength dicretization on the corde with respect to the naca profile
 figure;
-plot(Z(1,(1:length(Z)-1)), k((1:length(Z)-1))) % we don't plot the last point as it is a singularity
-% plot(Z(1,:), k)
+%plot(Z(1,(1:length(Z)-1)), k((1:length(Z)-1))) % we don't plot the last point as it is a singularity
+plot(Z(1,:), k)
 title(sprintf('NACA %d%d%d', m*100, p*10, t*100), 'FontSize', 14);
 xlabel('x/c [-]','FontSize', 14);
 ylabel('vortex strength [circulation/length]','FontSize', 14);
