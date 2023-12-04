@@ -84,4 +84,10 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 % specified of a discretized naca profile
     k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_back);
 
+    
+    % for i=1:length(theta_front)
+    %     Cl_front = Cl_front + (1/Uinf * k*sin(theta_front)*(theta_front(i+1)-theta_front(i)) );
+    % end
+    %     Cl_back
+    % Cl_test = 1/Uinf * k*sin(,0,pi) ;
 end

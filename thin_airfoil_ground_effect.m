@@ -4,34 +4,45 @@ clear all
 close all
 
 % definition of the variables
-alpha_deg = linspace(-6,22,100); % angle of attack in degree
+nb_alpha = 100 ;                                                                            % [-], number of angle alpha evaluated
+alpha_deg = linspace(-6,22,nb_alpha); % angle of attack in degree
 alpha_rad = alpha_deg *pi/180 ;
 % NACA4412 profile : but you can choose any other 4-digit of your choice
-m = 0.04; % relative maximum camber
-p = 0.4; % relative location of maximum camber
-t = 0.12; % relative thikness
-c = 1;
-Uinf = 10 ; %[m/s], speed of the airflow in amout
+m = 0.04;           % [-], relative maximum camber
+p = 0.4;            % [-], relative location of maximum camber
+t = 0.12;           % [-], relative thikness
+c = 1;              % [m], cord length
+Uinf = 10 ;         % [m/s], speed of the airflow in amout
 
-CL = lift_coef(m, p, c, alpha_rad);
+CL = lift_coef(m, p, c, alpha_rad); % hand computation
+% [A0, An] = A_n_computation(m, p, 1) ; % code computation
+% CL_code = 2.*pi.*alpha_rad + pi.*(An(1)-2*A0); 
+% % to check if our computation of A0 and A1 was good 
 
 %% get the point of the naca profile selcted by using this function
-nb = 100 ; % number of point of the discrétisation of the corde
-alpha = 10*pi/180; % Angle of attack in rad (AOA)
-h = 0.5; % high with respect to ground (mesure at the trelling edge)
-[Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf) ; % points with Z the corde point; Zl the lower profile point and Zu the upper profile point
+nb = 100 ;          % [-], number of point of the discrétisation of the corde
+alpha = 10*pi/180;  % [rad], Angle of attack (AOA)
+h = 0.5;            % [m], high with respect to ground (mesure at the trelling edge)
+
+% Naca discretised points with : 
+[Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf) ;
+% Z the cord points
+% Zl the lower profile points
+% Zu the upper profile points
+% k dicretised vortex strength
 
 % definition of the symetrical point of the cord
 Zsy = [Z(1,:) ; - Z(2,:)] ;
 
 
 %% computation of the Cl without the ground but with the discretized methode
-for i =1:20 % variation of the AOA from 1 to 20°
-    alpha_t(i) = i*pi/180; % Angle of attack in rad (AOA)
-    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_t(i), h, nb, Uinf) ;
-    Cpu_inf = - abs(k_inf)/Uinf ;
-    Cpl_inf = abs(k_inf)/Uinf ;
-    Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;
+Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
+for i =1:nb_alpha                                                                                                                                       
+    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
+    Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
+    Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
+    Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
+    % Cl_test(i) = 1/Uinf * integral ;
 end
 
 
@@ -39,8 +50,10 @@ end
 figure;
 hold on
 plot(alpha_deg, CL);
-plot(alpha_t*180/pi,Cl_inf,"d",'Color','red'); % plot the Cl values found with the discretized methode
-title('Lift coeficient of a airfoil without ground effect');
+plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
+% plot(alpha_deg, CL_code,"-","Color","green");
+title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
+legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
 xlabel('alpha [°]');
 ylabel('CL [-]');
 hold off
@@ -59,7 +72,7 @@ plot(Zsy(1,:),Zsy(2,:),'.') % symetrical cord
 % plot a line to schematized the ground :
 plot([0, Z(1,end)] , [0, 0])
 %title('NACA 4412 profile discretized');
-title(sprintf('NACA %d%d%d \n AOA = %d°  and  h/c = %d', m*100, p*10, t*100, alpha*180/pi, h/c), 'FontSize', 14);
+title(sprintf('NACA %d%d%d \n AOA = %d°  and  h/c = %.2f', m*100, p*10, t*100, alpha*180/pi, h/c), 'FontSize', 14);
 xlabel('x/c [-]','FontSize', 14);
 ylabel('y/c [-]','FontSize', 14);
 axis equal;

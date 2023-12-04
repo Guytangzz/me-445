@@ -1,7 +1,7 @@
 function CL = lift_coef(m, p, c, alpha)
 % computation of the lift coefition of a naca profile
 % by using the thine arifoil theory
-% NACAmpthinkness 
+% NACAmpt 
 % alpha is supposed to be a vector which represent the angle of atack
 
 
@@ -33,7 +33,7 @@ function CL = lift_coef(m, p, c, alpha)
     theta_p = acos(1-2*p/c);
     A0 = (m/(pi*p^2)) * ((2*p-1)*theta_p + sin(theta_p)) + (m/(pi*(1-p)^2))*((2*p-1)*(pi-theta_p)-sin(theta_p)) ;
     A1 = (2*m/(pi*p^2)) * ((2*p-1)*sin(theta_p) + 1/4 *sin(2*theta_p) + theta_p/2) - (2*m/(pi*(1-p)^2)) * ((2*p-1)*sin(theta_p) + 1/4 *sin(2*theta_p) - 1/2 *(pi-theta_p)) ;
-
+   
     % compitation of CL
     CL = 2.*pi.*alpha + pi.*(A1-2*A0);
 end

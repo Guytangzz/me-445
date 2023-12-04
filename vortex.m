@@ -27,8 +27,6 @@ function k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_bac
 % computation of k3 : 
     k3_front = 2.*Uinf.* sin(theta_xc_front)*sum(An); 
     k3_back = 2.*Uinf.* sin(theta_xc_back)*sum(An);
-    %k3_front = 2.*Uinf.* (m*sin(theta_xc_front))./(p^2) ; 
-    %k3_back = 2.*Uinf.* (m*sin(theta_xc_back))./((1-p)^2) ;
 
 % get back the total k :
     k_front = k1_front + k2_front + k3_front ;
