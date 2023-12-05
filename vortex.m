@@ -1,13 +1,13 @@
 function k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_back)
-% this programe aims to evalutae the vorteces strenght at each location
+% this programe aims to evalutae the vorteces strength at each location
 % specified of a discretized naca profile
 
 % Transforme the xc coordinate into angle of a cercle (with 0 at the
-% ledding edge and pi at the trelling edge
+% leading edge and pi at the trailing edge
     theta_xc_front = acos(1-2.*xc_front);
     theta_xc_back = acos(1-2.*xc_back);
 
-% computation of the effective angle pf attack (angle between the cord and
+% computation of the effective angle of attack (angle between the chord and
 % the incident horizontal flow
     alpha_eff_front = -(theta_front-alpha);
     alpha_eff_back = -(theta_back-alpha);

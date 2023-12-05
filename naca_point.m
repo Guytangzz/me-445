@@ -24,7 +24,7 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
     yc_front = (m/(p^2)) .* (2.*p.*xc_front - xc_front.^2);
     yc_back = (m/((1-p)^2)) .* ((1-2*p) + 2.*p.*xc_back - xc_back.^2);
 
-% know we take the angle o attack into account
+% know we take the angle of attack into account
     x0_front = 1 - (1-xc_front)*cos(alpha) ;
     x0_back = 1 - (1-xc_back)*cos(alpha) ;
     y0_front = yc_front + (1-xc_front)*sin(alpha) + h/c ;

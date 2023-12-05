@@ -3,16 +3,17 @@
 clear all
 close all
 
-% definition of the variables
-nb_alpha = 100 ;                                                                            % [-], number of angle alpha evaluated
+%% definition of the variables
+nb_alpha = 100 ;                      % [-], number of angle alpha evaluated
 alpha_deg = linspace(-6,22,nb_alpha); % angle of attack in degree
 alpha_rad = alpha_deg *pi/180 ;
+
 % NACA4412 profile : but you can choose any other 4-digit of your choice
-m = 0.04;           % [-], relative maximum camber
-p = 0.4;            % [-], relative location of maximum camber
-t = 0.12;           % [-], relative thikness
-c = 1;              % [m], cord length
-Uinf = 10 ;         % [m/s], speed of the airflow in amout
+m = 0.04;                             % [-], relative maximum camber
+p = 0.4;                              % [-], relative location of maximum camber
+t = 0.12;                             % [-], relative thikness
+c = 1;                                % [m], cord length
+Uinf = 10 ;                           % [m/s], speed of the airflow in amout
 
 CL = lift_coef(m, p, c, alpha_rad); % hand computation
 % [A0, An] = A_n_computation(m, p, 1) ; % code computation
@@ -22,14 +23,14 @@ CL = lift_coef(m, p, c, alpha_rad); % hand computation
 %% get the point of the naca profile selcted by using this function
 nb = 100 ;          % [-], number of point of the discrétisation of the corde
 alpha = 10*pi/180;  % [rad], Angle of attack (AOA)
-h = 0.5;            % [m], high with respect to ground (mesure at the trelling edge)
+h = 0.5;            % [m], height with respect to ground (mesured at the trailing edge)
 
 % Naca discretised points with : 
 [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf) ;
-% Z the cord points
-% Zl the lower profile points
-% Zu the upper profile points
-% k dicretised vortex strength
+                   % Z the cord points
+                   % Zl the lower profile points
+                   % Zu the upper profile points
+                   % k dicretised vortex strength
 
 % definition of the symetrical point of the cord
 Zsy = [Z(1,:) ; - Z(2,:)] ;
