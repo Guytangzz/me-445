@@ -33,10 +33,4 @@ dyc_front(pi/2)
 dyc_back(pi/2)
 dyc_calculated
 
- 
-
-for j = 1:m
-    
-end
-
 end 
