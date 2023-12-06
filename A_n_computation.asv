@@ -24,13 +24,10 @@ dyc_calculated = A0;
         dyc_back_n = @(Theta) (2*m/((1-p)^2)) .* (p-( (1-cos(Theta)) /2 )) .* cos(i*Theta) ;
     % computation of An
         An(i) = (2/pi)*(integral(dyc_front_n,0,Theta_p) + integral(dyc_back_n,Theta_p,pi)) ;
-        dyc_calculated = dyc_calculated
+        dyc_calculated = dyc_calculated + An(i)*cos(i*(pi/2));
     end
 
- 
-
-for j = 1:m
-    
-end
+% modify input and output 
+[] = debug_function(m, p, n)
 
 end 

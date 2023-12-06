@@ -27,6 +27,7 @@ h = 0.5;            % [m], height with respect to ground (mesured at the trailin
 
 % Naca discretised points with : 
 [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf) ;
+
                    % Z the cord points
                    % Zl the lower profile points
                    % Zu the upper profile points
@@ -37,27 +38,27 @@ Zsy = [Z(1,:) ; - Z(2,:)] ;
 
 
 %% computation of the Cl without the ground but with the discretized methode
-Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
-for i =1:nb_alpha                                                                                                                                       
-    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
-    Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
-    Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
-    Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
-    % Cl_test(i) = 1/Uinf * integral ;
-end
+% Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
+% for i =1:nb_alpha                                                                                                                                       
+%     [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
+%     Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
+%     Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
+%     Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
+%     % Cl_test(i) = 1/Uinf * integral ;
+% end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Graphics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure;
-hold on
-plot(alpha_deg, CL);
-plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
-% plot(alpha_deg, CL_code,"-","Color","green");
-title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
-legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
-xlabel('alpha [°]');
-ylabel('CL [-]');
-hold off
+% figure;
+% hold on
+% plot(alpha_deg, CL);
+% plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
+% % plot(alpha_deg, CL_code,"-","Color","green");
+% title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
+% legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
+% xlabel('alpha [°]');
+% ylabel('CL [-]');
+% hold off
 
 %% graphic of the NACA 4412 at a high of h/c
 figure;

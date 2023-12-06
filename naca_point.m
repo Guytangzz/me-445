@@ -10,7 +10,7 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 
 %% all is adimentionalized with respect to the corde c
 
-% repartition of the point eavenly between front and back
+% repartition of the point evenly between front and back
     nb_front = round(nb*p) ; % we take the round to get a integer
     nb_back = nb - nb_front ;
 
@@ -23,6 +23,25 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 % this equation is a naca standardization
     yc_front = (m/(p^2)) .* (2.*p.*xc_front - xc_front.^2);
     yc_back = (m/((1-p)^2)) .* ((1-2*p) + 2.*p.*xc_back - xc_back.^2);
+
+%     % debug
+%     figure;
+%     plot(xc_front,yc_front),hold on
+%     plot(xc_back,yc_back),hold off
+% 
+%     for i = 2:nb_front
+%         dyc_front_test(i) = (yc_front(i) - yc_front(i-1)) ./ (xc_front(i) - xc_front(i-1));
+%     end
+% 
+%     for i = 2:nb_back
+%         dyc_back_test(i) = (yc_back(i) - yc_back(i-1)) ./ (xc_back(i) - xc_back(i-1));
+%     end
+% 
+%     figure;
+%     plot(xc_front,dyc_front_test), hold on 
+%     plot(xc_back,dyc_back_test), hold off
+
+
 
 % know we take the angle of attack into account
     x0_front = 1 - (1-xc_front)*cos(alpha) ;
@@ -83,6 +102,7 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 % compute the vorteces strenght at each location
 % specified of a discretized naca profile
     k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_back);
+    
 
     
     % for i=1:length(theta_front)
