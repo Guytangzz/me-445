@@ -30,7 +30,7 @@ function CL = lift_coef(m, p, c, alpha)
    %  A1 = A1_front + A1_back ;
 
     % MANUAL COMPUTATION
-    theta_p = acos(1-2*p/c);
+    theta_p = acos(1-2*p);
     A0 = (m/(pi*p^2)) * ((2*p-1)*theta_p + sin(theta_p)) + (m/(pi*(1-p)^2))*((2*p-1)*(pi-theta_p)-sin(theta_p)) ;
     A1 = (2*m/(pi*p^2)) * ((2*p-1)*sin(theta_p) + 1/4 *sin(2*theta_p) + theta_p/2) - (2*m/(pi*(1-p)^2)) * ((2*p-1)*sin(theta_p) + 1/4 *sin(2*theta_p) - 1/2 *(pi-theta_p)) ;
    

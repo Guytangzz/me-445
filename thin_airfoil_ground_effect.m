@@ -21,8 +21,9 @@ CL = lift_coef(m, p, c, alpha_rad); % hand computation
 % % to check if our computation of A0 and A1 was good 
 
 %% get the point of the naca profile selcted by using this function
-nb = 100 ;          % [-], number of point of the discrétisation of the corde
-alpha = 10*pi/180;  % [rad], Angle of attack (AOA)
+nb = 1000 ;          % [-], number of point of the discrétisation of the corde
+dxc = 1/nb ;        % [-], adimentionalized infinetesimal discretized length
+alpha = 4*pi/180;  % [rad], Angle of attack (AOA)
 h = 0.5;            % [m], height with respect to ground (mesured at the trailing edge)
 
 % Naca discretised points with : 
@@ -38,27 +39,30 @@ Zsy = [Z(1,:) ; - Z(2,:)] ;
 
 
 %% computation of the Cl without the ground but with the discretized methode
-% Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
-% for i =1:nb_alpha                                                                                                                                       
-%     [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
-%     Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
-%     Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
-%     Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
-%     % Cl_test(i) = 1/Uinf * integral ;
-% end
+Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
+for i =1:nb_alpha                                                                                                                                       
+    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
+    Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
+    Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
+    Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
+    Cl_inf_test(i) = 0 ; % initialisation
+    for j=2:nb
+        Cl_inf_test(i) = Cl_inf_test(i) + 1/Uinf *2* k_inf(j)*dxc;
+    end
+end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Graphics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% figure;
-% hold on
-% plot(alpha_deg, CL);
-% plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
-% % plot(alpha_deg, CL_code,"-","Color","green");
-% title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
-% legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
-% xlabel('alpha [°]');
-% ylabel('CL [-]');
-% hold off
+figure;
+hold on
+plot(alpha_deg, CL);
+plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
+plot(alpha_deg,Cl_inf_test,"-",'Color','green'); % plot the Cl values found with the discretized methode but sums
+title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
+legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),sprintf('Second Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
+xlabel('alpha [°]');
+ylabel('CL [-]');
+hold off
 
 %% graphic of the NACA 4412 at a high of h/c
 figure;
