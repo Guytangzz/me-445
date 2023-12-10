@@ -4,7 +4,7 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 % it also uses the vortex function to compute the vorteces strenght at each location
 % specified of the discretized naca profile
 % alpha is a unique value here in radian
-% NACAmpT ex : NACA4412 m = 0.04 ; p = 0.4 ; T = 0.12
+% NACAmpT ex : NACA4412 m = 0.04 ; p = 0.4 ; t = 0.12
 % h is the high of the airfoil (distance from the treling edge to the ground) 
 % nb is the number of point discretisation
 
@@ -102,7 +102,6 @@ function [Z , Zl , Zu, k] = naca_point(m, p, t, c, alpha, h, nb, Uinf)
 % compute the vorteces strenght at each location
 % specified of a discretized naca profile
     k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_back);
-    
 
     
     % for i=1:length(theta_front)
