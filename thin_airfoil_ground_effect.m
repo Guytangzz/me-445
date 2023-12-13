@@ -35,9 +35,9 @@ h = 0.1;            % [m], height with respect to ground (mesured at the trailin
 %% computation of the Cl without the ground but with the discretized methode
 Cl_inf = zeros(nb_alpha,1) ;                                                                % initalisation
 for i =1:nb_alpha                                                                                                                                       
-    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;                % NACA discretised
-    Cpu_inf = - abs(k_inf)/Uinf ;                                                           % [-], upper pression coef
-    Cpl_inf = abs(k_inf)/Uinf ;                                                             % [-], lower pression coef
+    [aa , bb , cc, k_inf] = naca_point(m, p, t, c, alpha_rad(i), h, nb, Uinf) ;             % NACA discretised
+    Cpu_inf = - k_inf/Uinf ;                                                           % [-], upper pression coef
+    Cpl_inf = k_inf/Uinf ;                                                             % [-], lower pression coef
     Cl_inf(i) = sum(Cpl_inf(1,2:length(Cpl_inf)) - Cpu_inf(1,2:length(Cpu_inf)))*(1/nb) ;   % [-], Lift coef
     Cl_inf_test(i) = 0 ; % initialisation
     for j=2:nb
@@ -78,13 +78,32 @@ title(sprintf('NACA %d%d%d \n Variation in the total lift coefficient and lift i
 xlabel('AOA [°]','FontSize', 14);
 ylabel('CL [-]','FontSize', 14);
 grid on
+
+
+% if we take into account the the lift is not vertical but perpendicular to
+% the airfoil we get :
+figure ;
+for i=1:length(h_range)
+    [CL_fin] = Cp_gr_curve(m, p, t, c, alpha_range, h_range(i), nb, Uinf) ;
+    plot(alpha_range.*180./pi,CL_fin(:).*cos(alpha_range(:)),'DisplayName', sprintf('h/c = %.2f \n', h_range(i)/c))
+    hold on
+end
+legend ;
+hold off
+title(sprintf('NACA %d%d%d \n Variation in the total lift coefficient and lift increment curves \n with angles of attack at various ride heights \n by taking the true vertical lift', m*100, p*10, t*100), 'FontSize', 14);
+xlabel('AOA [°]','FontSize', 14);
+ylabel('CL [-]','FontSize', 14);
+grid on
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GRAPHICS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure;
 hold on
 plot(alpha_deg, CL_inf_th);
 plot(alpha_deg,Cl_inf,"-",'Color','red'); % plot the Cl values found with the discretized methode
-plot(alpha_deg,Cl_inf_test,"-",'Color','green'); % plot the Cl values found with the discretized methode but sums
+%plot(alpha_deg,Cl_inf_test,"-",'Color','green'); % plot the Cl values found with the discretized methode but sums
 title(sprintf('NACA %d%d%d \n Lift coeficient without ground effect', m*100, p*10, t*100));
 legend('Thin airfoil Theory',sprintf('Thin airfoil Theory discretised in %d points',nb),sprintf('Second Thin airfoil Theory discretised in %d points',nb),'FontSize', 14);
 xlabel('alpha [°]');

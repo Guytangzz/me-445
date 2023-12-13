@@ -9,8 +9,8 @@ function k = vortex(xc_front, xc_back, m, p, alpha, Uinf, theta_front, theta_bac
 
 % computation of the effective angle of attack (angle between the chord and
 % the incident horizontal flow
-    alpha_eff_front = alpha  ;%+ theta_front ;
-    alpha_eff_back = alpha   ;%+ theta_back ;
+    alpha_eff_front = alpha;%  - theta_front ; % slide 149
+    alpha_eff_back = alpha ;%  - theta_back ;
 
 % Compute A0 and An
     n = 5 ; % number of term in the Fourier transform after 25 it is around 0 at 10^(-4)
